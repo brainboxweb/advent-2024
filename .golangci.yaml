@@ -1,0 +1,80 @@
+linters:
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - contextcheck
+    - bodyclose
+    - errcheck
+    - errchkjson
+    - errorlint
+    - exhaustive
+    - gocheckcompilerdirectives
+    - gocritic
+    - goimports
+    - gosec
+    - reassign
+    - revive
+    - rowserrcheck
+    - sqlclosecheck
+    - testifylint
+    - thelper
+    - tparallel
+
+issues:
+  exclude-rules:
+      - path: _test\.go
+        linters:
+          - gosec
+          - bodyclose
+          - revive
+
+linters-settings:
+  exhaustive:
+    check:
+      - switch
+      - map
+    default-signifies-exhaustive: true
+  revive:
+    enable-all-rules: true 
+    rules:
+      - name: package-comments
+        disabled: true
+      - name: unused-parameter
+        disabled: true
+      - name: line-length-limit
+        disabled: true
+      - name: cyclomatic
+        disabled: true
+      - name: add-constant
+        disabled: true
+      - name: cognitive-complexity
+        disabled: true
+      - name: empty-lines
+        disabled: true
+      - name: function-length
+        disabled: true
+      - name: exported
+        disabled: true
+      - name: max-public-structs
+        disabled: true
+      - name: flag-parameter
+        disabled: true
+      - name: import-shadowing
+        disabled: true
+      - name: confusing-results
+        disabled: true
+      - name: import-alias-naming
+        disabled: true
+      - name: unused-receiver
+        disabled: true
+      - name: confusing-naming
+        disabled: true
+      - name: deep-exit
+        disabled: true
+      - name: nested-structs
+        disabled: true
+      - name: indent-error-flow
+        disabled: true
+      - name:  blank-imports
+        disabled: true
