@@ -2,9 +2,11 @@ package helpers
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func ReverseSlice(s []string) []string {
@@ -22,18 +24,19 @@ func ReverseSliceOfSlices(s [][]string) [][]string {
 }
 
 func TransposeSliceOfSlices(slice [][]string) [][]string {
-    xl := len(slice[0])
-    yl := len(slice)
-    result := make([][]string, xl)
-    for i := range result {
-        result[i] = make([]string, yl)
-    }
-    for i := 0; i < xl; i++ {
-        for j := 0; j < yl; j++ {
-            result[i][j] = slice[j][i]
-        }
-    }
-    return result
+	xl := len(slice[0])
+	yl := len(slice)
+	result := make([][]string, xl)
+	for i := range result {
+		result[i] = make([]string, yl)
+	}
+	for i := 0; i < xl; i++ {
+		for j := 0; j < yl; j++ {
+			result[i][j] = slice[j][i]
+		}
+	}
+
+	return result
 }
 
 func GetData(filename string) []int {
@@ -56,6 +59,7 @@ func GetData(filename string) []int {
 		}
 		dat = append(dat, i)
 	}
+
 	return dat
 }
 
@@ -71,5 +75,26 @@ func GetDataString(filename string) []string {
 	for scanner.Scan() {
 		dat = append(dat, scanner.Text())
 	}
+
 	return dat
+}
+
+func ToXY(data []string) [][]string {
+	limit := len(data)
+	slice_of_slices := make([][]string, limit)
+	for i := 0; i < limit; i++ {
+		slice_of_slices[i] = make([]string, limit)
+		line := data[i]
+		chars := strings.Split(line, "")
+		slice_of_slices[i] = chars
+	}
+
+	return TransposeSliceOfSlices(slice_of_slices)
+}
+
+func DumpXY(data [][]string) {
+	printable := TransposeSliceOfSlices(data)
+	for _, line := range printable {
+		fmt.Println(strings.Join(line, ""))
+	}
 }
