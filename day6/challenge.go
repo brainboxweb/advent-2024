@@ -6,11 +6,6 @@ import (
 
 func ChallengeOne(data [][]string) int {
 	theMap := newMap(data)
-
-	// spew.Dump(theMap)
-	// panic("stiop")
-	// return 7
-
 	res := theMap.Move()
 
 	return res
@@ -18,26 +13,34 @@ func ChallengeOne(data [][]string) int {
 
 func ChallengeTwo(data [][]string) int {
 	counter := 0
-
-	for x := 0; x < len(data); x++ {
-		for y := 0; y < len(data[0]); y++ {
-			alteredData := data // one change at a time!!!
-			if data[x][y] == "^" {
-				continue
-			}
-			if data[x][y] == "#" {
-				continue
-			}
-			alteredData[x][y] = "#" // add an obstruction
-			theMap := newMap(alteredData)
-			theMap.Move()
-			if theMap.Loop {
+	altData := [][]string{}
+	for y := 0; y < len(data[0]); y++ {
+		for x := 0; x < len(data); x++ {
+			altData = makeVariation(data, x, y)
+			theMap := newMap(altData)
+			isLoop := theMap.MoveTwo()
+			if isLoop {
 				counter++
 			}
 		}
 	}
 
 	return counter
+}
+
+func makeVariation(data [][]string, targetX, targetY int) [][]string {
+	limit := len(data) // assume square
+	altData := [][]string{}
+	for _, line := range data {
+		contents := make([]string, limit)
+		copy(contents, line)
+		altData = append(altData, contents)
+	}
+	if altData[targetX][targetY] != "^" {
+		altData[targetX][targetY] = "#" // new obstacle
+	}
+
+	return altData
 }
 
 func newMap(data [][]string) *Map {
@@ -74,20 +77,18 @@ type Point struct {
 	X int
 	Y int
 }
-
 type Map struct {
-	grid      [][]string
-	lenX      int
-	lenY      int
-	start     Point
-	current   Point
-	direction string
-	visited   map[string]Point
-	Loop      bool
+	grid         [][]string
+	lenX         int
+	lenY         int
+	start        Point
+	current      Point
+	direction    string
+	visited      map[string]Point
+	visitedCount int
 }
 
 func (m *Map) Move() int {
-
 	for {
 		stillMoving := m.moveInDirection(m.direction)
 		if !stillMoving {
@@ -98,17 +99,20 @@ func (m *Map) Move() int {
 	return len(m.visited)
 }
 
-func (m *Map) moveInDirection(dirn string) bool {
-	fmt.Println("-------> moving ", dirn)
+func (m *Map) MoveTwo() bool {
+	for {
+		if m.visitedCount > len(m.grid)*50 { // endless loop
+			return true
+		}
+		if !m.moveInDirection(m.direction) {
+			return false // leaked out of the grid
+		}
+	}
+}
 
+func (m *Map) moveInDirection(dirn string) bool {
 	stillMoving := true
 	if dirn == "N" {
-		// if m.current == m.start && len(m.visited) > 1 { // Think this is the only direction I have to worry about
-		// 	fmt.Println("Passing go!")
-		// 	// in a loop
-		// 	m.Loop = true
-		// 	return false // I.e., we're done here
-		// }
 		stillMoving = m.moveNorth()
 	}
 	if dirn == "S" {
@@ -126,7 +130,6 @@ func (m *Map) moveInDirection(dirn string) bool {
 
 func (m *Map) moveNorth() bool {
 	candidate := m.current
-	count := 0
 	for {
 		candidate = Point{candidate.X, candidate.Y - 1} // have incremented
 		if candidate.Y < 0 {
@@ -136,16 +139,12 @@ func (m *Map) moveNorth() bool {
 			m.direction = "E" // inverted
 			return true       // still moving
 		}
-		// take the step
-		m.visited[fmt.Sprintf("%d,%d", candidate.X, candidate.Y)] = candidate
-		m.current = candidate
-		count++
+		m.takeStep(candidate)
 	}
 }
 
 func (m *Map) moveSouth() bool { // S is "inverted"
 	candidate := m.current
-	count := 0
 	for {
 		candidate = Point{candidate.X, candidate.Y + 1} // have incremented
 		if candidate.Y > m.lenY-1 {
@@ -155,16 +154,12 @@ func (m *Map) moveSouth() bool { // S is "inverted"
 			m.direction = "W" // inverted
 			return true       // still moving
 		}
-		// take the step
-		m.visited[fmt.Sprintf("%d,%d", candidate.X, candidate.Y)] = candidate
-		m.current = candidate
-		count++
+		m.takeStep(candidate)
 	}
 }
 
 func (m *Map) moveEast() bool {
 	candidate := m.current
-	count := 0
 	for {
 		candidate = Point{candidate.X + 1, candidate.Y}
 		if candidate.X > m.lenX-1 {
@@ -174,16 +169,12 @@ func (m *Map) moveEast() bool {
 			m.direction = "S"
 			return true // still moving
 		}
-		// take the step
-		m.visited[fmt.Sprintf("%d,%d", candidate.X, candidate.Y)] = candidate
-		m.current = candidate
-		count++
+		m.takeStep(candidate)
 	}
 }
 
 func (m *Map) moveWest() bool {
 	candidate := m.current
-	count := 0
 	for {
 		candidate = Point{candidate.X - 1, candidate.Y}
 		if candidate.X < 0 {
@@ -193,9 +184,12 @@ func (m *Map) moveWest() bool {
 			m.direction = "N"
 			return true // still moving
 		}
-		// take the step
-		m.visited[fmt.Sprintf("%d,%d", candidate.X, candidate.Y)] = candidate
-		m.current = candidate
-		count++
+		m.takeStep(candidate)
 	}
+}
+
+func (m *Map) takeStep(candidate Point) {
+	m.visitedCount++
+	m.visited[fmt.Sprintf("%d,%d", candidate.X, candidate.Y)] = candidate
+	m.current = candidate
 }

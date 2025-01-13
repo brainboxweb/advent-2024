@@ -33,7 +33,6 @@ func TestChallenge(t *testing.T) {
 	}
 }
 
-
 func TestChallengeTwo(t *testing.T) {
 	tests := []struct {
 		dataFile string
@@ -43,10 +42,10 @@ func TestChallengeTwo(t *testing.T) {
 			"../data/day6_test.txt",
 			6,
 		},
-		// {
-		// 	"../data/day6.txt",
-		// 	5275,
-		// },
+		{
+			"../data/day6.txt",
+			2008,
+		},
 	}
 
 	for _, tt := range tests {
@@ -58,4 +57,3 @@ func TestChallengeTwo(t *testing.T) {
 		})
 	}
 }
-
