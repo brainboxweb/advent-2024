@@ -45,16 +45,3 @@ func TestToXY(t *testing.T) {
 	}
 }
 
-func TestDumpXY(t *testing.T) {
-	t.Fail()
-	input := []string{
-		"abc",
-		"def",
-		"ghi",
-	}
-
-	result := helpers.ToXY(input)
-
-	helpers.DumpXY(result)
-
-}
