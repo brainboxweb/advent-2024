@@ -3,7 +3,6 @@ package helpers
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -42,37 +41,37 @@ func TransposeSliceOfSlices(slice [][]string) [][]string {
 func GetDataString(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed opening file: %s", err)
+		panic(err)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-	var dat []string
+	var ret []string
 	for scanner.Scan() {
-		dat = append(dat, scanner.Text())
-	}
-
-	return dat
-}
-
-func GetDataInt(filename string) []int {
-	data := GetDataString(filename)
-	var ret []int
-	for _, line := range data {
-		val, err := strconv.Atoi(line)
-		if err != nil {
-			panic("not expected")
-		}
-		ret = append(ret, val)
+		ret = append(ret, scanner.Text())
 	}
 
 	return ret
 }
 
+func GetDataInt(filename string) ([]int, error) {
+	data := GetDataString(filename)
+	var ret []int
+	for _, line := range data {
+		val, err := strconv.Atoi(line)
+		if err != nil {
+			return nil, err
+		}
+		ret = append(ret, val)
+	}
+
+	return ret, nil
+}
+
 func ToXY(data []string) [][]string {
 	limit := len(data)
 	sliceOfSlices := make([][]string, limit)
-	for i := 0; i < limit; i++ {
+	for i := range limit {
 		sliceOfSlices[i] = make([]string, limit)
 		line := data[i]
 		chars := strings.Split(line, "")
