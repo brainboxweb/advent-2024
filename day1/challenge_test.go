@@ -9,23 +9,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const testDataPath = "../data/"
+
 func TestDay1(t *testing.T) {
 	tests := []struct {
 		dataFile string
 		expected int
 	}{
 		{
-			"../data/day1_test.txt",
+			"day1_test.txt",
 			11,
 		},
 		{
-			"../data/day1.txt",
+			"day1.txt",
 			1197984,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.dataFile, func(t *testing.T) {
-			dataSet := helpers.GetDataString(tt.dataFile)
+			dataSet := helpers.GetDataString(testDataPath + tt.dataFile)
 			result := day1.ChallengeOne(dataSet)
 			assert.Equal(t, tt.expected, result)
 		})
@@ -33,23 +35,22 @@ func TestDay1(t *testing.T) {
 }
 
 func TestDay1Part2(t *testing.T) {
-
 	tests := []struct {
 		dataFile string
 		expected int
 	}{
 		{
-			"../data/day1_test.txt",
+			"day1_test.txt",
 			31,
 		},
 		{
-			"../data/day1.txt",
+			"day1.txt",
 			23387399,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.dataFile, func(t *testing.T) {
-			dataSet := helpers.GetDataString(tt.dataFile)
+			dataSet := helpers.GetDataString(testDataPath + tt.dataFile)
 			result := day1.ChallengeTwo(dataSet)
 			assert.Equal(t, tt.expected, result)
 		})

@@ -21,13 +21,13 @@ linters:
     - thelper
     - tparallel
 
-issues:
-  exclude-rules:
-      - path: _test\.go
-        linters:
-          - gosec
-          - bodyclose
-          - revive
+# issues:
+#   exclude-rules:
+#       - path: _test\.go
+#         linters:
+#           - gosec
+#           - bodyclose
+#           - revive
 
 linters-settings:
   exhaustive:
@@ -38,43 +38,43 @@ linters-settings:
   revive:
     enable-all-rules: true 
     rules:
-      - name: package-comments
-        disabled: true
-      - name: unused-parameter
-        disabled: true
-      - name: line-length-limit
-        disabled: true
-      - name: cyclomatic
-        disabled: true
+      # - name: package-comments
+      #   disabled: true
+      # - name: unused-parameter
+      #   disabled: true
+      # - name: line-length-limit
+      #   disabled: true
+      # - name: cyclomatic
+      #   disabled: true
       - name: add-constant
         disabled: true
-      - name: cognitive-complexity
-        disabled: true
-      - name: empty-lines
-        disabled: true
-      - name: function-length
-        disabled: true
-      - name: exported
-        disabled: true
-      - name: max-public-structs
-        disabled: true
-      - name: flag-parameter
-        disabled: true
-      - name: import-shadowing
-        disabled: true
-      - name: confusing-results
-        disabled: true
-      - name: import-alias-naming
-        disabled: true
-      - name: unused-receiver
-        disabled: true
-      - name: confusing-naming
-        disabled: true
-      - name: deep-exit
-        disabled: true
-      - name: nested-structs
-        disabled: true
-      - name: indent-error-flow
-        disabled: true
-      - name:  blank-imports
-        disabled: true
+      # - name: cognitive-complexity
+      #   disabled: true
+      # - name: empty-lines
+      #   disabled: true
+      # - name: function-length
+      #   disabled: true
+      # - name: exported
+      #   disabled: true
+      # - name: max-public-structs
+      #   disabled: true
+      # - name: flag-parameter
+      #   disabled: true
+      # - name: import-shadowing
+      #   disabled: true
+      # - name: confusing-results
+      #   disabled: true
+      # - name: import-alias-naming
+      #   disabled: true
+      # - name: unused-receiver
+      #   disabled: true
+      # - name: confusing-naming
+      #   disabled: true
+      # - name: deep-exit
+      #   disabled: true
+      # - name: nested-structs
+      #   disabled: true
+      # - name: indent-error-flow
+      #   disabled: true
+      # - name:  blank-imports
+      #   disabled: true
