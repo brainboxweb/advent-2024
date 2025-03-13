@@ -60,7 +60,7 @@ func (m *Map) Move() int {
 	return len(m.visited)
 }
 
-func (m *Map) MoveTwo() bool {
+func (m *Map) IsEndlessLoop() bool {
 	for {
 		if m.visitedCount > len(m.grid)*50 { // endless loop
 			return true
