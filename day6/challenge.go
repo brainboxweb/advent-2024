@@ -1,6 +1,8 @@
 package day6
 
-import "github.com/brainboxweb/advent-2024/day6/location"
+import (
+	"github.com/brainboxweb/advent-2024/day6/location"
+)
 
 func ChallengeOne(data [][]string) int {
 	theMap := location.NewMap(data)
@@ -15,7 +17,7 @@ func ChallengeTwo(data [][]string) int {
 		for x := range len(data) {
 			altData := makeVariation(data, x, y)
 			theMap := location.NewMap(altData)
-			isLoop := theMap.MoveTwo()
+			isLoop := theMap.IsEndlessLoop()
 			if isLoop {
 				counter++
 			}
