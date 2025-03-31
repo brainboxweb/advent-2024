@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-var rx = regexp.MustCompile("(mul)\\((\\d+)\\,(\\d+)\\)")
-var rx2 = regexp.MustCompile("(mul)\\((\\d+)\\,(\\d+)\\)|do\\(\\)|don't\\(\\)")
+var rx = regexp.MustCompile(`(mul)\((\d+)\,(\d+)\)`)
+var rx2 = regexp.MustCompile(`(mul)\((\d+)\,(\d+)\)|do\(\)|don't\(\)`)
 
 func ChallengeOne(data string) int {
 	matches := rx.FindAllStringSubmatch(data, -1)

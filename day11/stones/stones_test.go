@@ -33,7 +33,7 @@ func TestChallenge(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.data, func(t *testing.T) {
 			ss := stones.NewStoneSet(tt.data)
-			result := ss.Blink(tt.blinkCount)
+			result := ss.Blinks(tt.blinkCount)
 
 			assert.Equal(t, tt.expected, result)
 		})

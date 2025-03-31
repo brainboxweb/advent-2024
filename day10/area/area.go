@@ -70,7 +70,15 @@ func (t *Terrain) Step(start Point) []Point {
 	limit := len(t.XY)
 	targetHeight := start.Height + 1 // Step up
 	nextSteps := []Point{}
-	for i := -1; i < 2; i++ { // left and right
+	nextSteps = append(nextSteps, t.leftRight(start, limit, targetHeight)...)
+	nextSteps = append(nextSteps, t.upDown(start, limit, targetHeight)...)
+
+	return nextSteps
+}
+
+func (t *Terrain) leftRight(start Point, limit int, targetHeight int) []Point {
+	nextSteps := []Point{}
+	for i := -1; i < 2; i++ {
 		x := start.X + i
 		y := start.Y
 		if x < 0 || x > limit-1 || x == start.X {
@@ -81,7 +89,13 @@ func (t *Terrain) Step(start Point) []Point {
 			nextSteps = append(nextSteps, pnt)
 		}
 	}
-	for j := -1; j < 2; j++ { // up and down
+
+	return nextSteps
+}
+
+func (t *Terrain) upDown(start Point, limit int, targetHeight int) []Point {
+	nextSteps := []Point{}
+	for j := -1; j < 2; j++ {
 		x := start.X
 		y := start.Y + j
 		if y < 0 || y > limit-1 || y == start.Y {

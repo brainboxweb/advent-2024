@@ -22,9 +22,7 @@ func ChallengeOne(data []string) int {
 	return diff
 }
 
-func parse(data []string) ([]int, []int) {
-	one := []int{}
-	two := []int{}
+func parse(data []string) (one, two []int) {
 	for _, line := range data {
 		parts := strings.Split(line, "   ")
 		p1, _ := strconv.Atoi(parts[0])

@@ -7,5 +7,5 @@ import (
 func Challenge(data string, blinkCount int) int {
 	stoneSet := stones.NewStoneSet(data)
 
-	return stoneSet.Blink(blinkCount)
+	return stoneSet.Blinks(blinkCount)
 }
