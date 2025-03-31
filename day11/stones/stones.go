@@ -6,42 +6,24 @@ import (
 	"strings"
 )
 
-func NewStoneSet(data string) *StonesSet {
+func NewStoneSet(data string) *Set {
 	stones := parse(data)
 	stonesMap := make(map[int]int)
 	for _, stone := range stones {
 		stonesMap[stone]++
 	}
 
-	return &StonesSet{stones, stonesMap}
+	return &Set{stones, stonesMap}
 }
 
-type StonesSet struct {
+type Set struct {
 	stones    []int
 	stonesMap map[int]int
 }
 
-func (ss *StonesSet) Blink(blinkCount int) int {
-	type store struct {
-		multiplier int
-		newVals    []int
-	}
+func (ss *Set) Blinks(blinkCount int) int {
 	for range blinkCount {
-		things := []store{}
-		for k, val := range ss.stonesMap {
-			next := applyRules(k)
-			t := store{val, next}
-			things = append(things, t)
-		}
-		// rebuild  stonesMap
-		for k := range ss.stonesMap { // empty it
-			delete(ss.stonesMap, k)
-		}
-		for _, thing := range things {
-			for _, val := range thing.newVals {
-				ss.stonesMap[val] += thing.multiplier
-			}
-		}
+		ss.blink()
 	}
 	ret := 0
 	for _, val := range ss.stonesMap {
@@ -51,19 +33,38 @@ func (ss *StonesSet) Blink(blinkCount int) int {
 	return ret
 }
 
+func (ss *Set) blink() {
+	type store struct {
+		multiplier int
+		newVals    []int
+	}
+	things := []store{}
+	for k, val := range ss.stonesMap {
+		next := applyRules(k)
+		t := store{val, next}
+		things = append(things, t)
+	}
+	// rebuild stonesMap
+	for k := range ss.stonesMap { // empty it
+		delete(ss.stonesMap, k)
+	}
+	for _, thing := range things {
+		for _, val := range thing.newVals {
+			ss.stonesMap[val] += thing.multiplier
+		}
+	}
+}
+
 var cache = make(map[int][]int)
 
 func applyRules(input int) []int {
-
 	if input == 0 { // --------------- If 0
 		return []int{1}
 	}
-
 	val, ok := cache[input] // try to use cache
 	if ok {
 		return val
 	}
-
 	str := fmt.Sprint(input) // ------ If even no. of digits
 	length := len(str)
 	if length%2 == 0 {
@@ -75,7 +76,6 @@ func applyRules(input int) []int {
 		cache[input] = ret
 		return []int{n1, n2}
 	}
-
 	ret := []int{input * 2024}
 	cache[input] = ret
 	return ret // -------------------- Else

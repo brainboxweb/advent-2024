@@ -54,9 +54,7 @@ func getScore(updates [][]int) int {
 	return score
 }
 
-func parse(data []string) ([][]int, [][]int) {
-	var ordering [][]int
-	var updates [][]int
+func parse(data []string) (ordering, updates [][]int) {
 	splitByPipe := true
 	for _, line := range data {
 		if line == "" {

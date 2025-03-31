@@ -6,8 +6,6 @@ import (
 	"github.com/brainboxweb/advent-2024/day9/disk"
 )
 
-const space = -1
-
 func ChallengeOne(data string) int {
 	code := toIntSlice(data)
 	theDisk := disk.NewBasicDisk(code)
@@ -15,7 +13,6 @@ func ChallengeOne(data string) int {
 
 	return theDisk.Checksum()
 }
-
 
 func ChallengeTwo(data string) int {
 	code := toIntSlice(data)
