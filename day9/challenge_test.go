@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testDataPath = "../data/"
+var testDataPath = "../testdata/"
 
 func TestChallenge(t *testing.T) {
 	tests := []struct {
