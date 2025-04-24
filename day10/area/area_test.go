@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testDataFile = "../../data/"
+const testDataFile = "../../testdata/"
 
 func TestStartingPoints(t *testing.T) {
 	tests := []struct {
