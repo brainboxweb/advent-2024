@@ -1,3 +1,4 @@
+// Package area respresents the terrain
 package area
 
 import (
@@ -5,17 +6,20 @@ import (
 	"strconv"
 )
 
+// Terrain is a collection of points and starting points
 type Terrain struct {
 	XY             [][]int
 	StartingPoints []Point
 }
 
+// Point is a terrain location
 type Point struct {
 	X      int
 	Y      int
 	Height int
 }
 
+// New returns a Terrain
 func New(data [][]string) *Terrain {
 	limit := len(data)
 	sliceOfSlices := make([][]int, limit)
@@ -30,6 +34,7 @@ func New(data [][]string) *Terrain {
 	return &Terrain{XY: sliceOfSlices}
 }
 
+// FindStartingPoints gets all starting points
 func (t *Terrain) FindStartingPoints() {
 	limit := len(t.XY)
 	for i := range limit {
@@ -42,14 +47,12 @@ func (t *Terrain) FindStartingPoints() {
 	}
 }
 
+// Walk takes steps
 func (t *Terrain) Walk(start Point) map[string]int {
 	endPoints := make(map[string]int) // Need distinct
 	startArray := []Point{}
 	startArray = append(startArray, start)
-	for {
-		if len(startArray) < 1 {
-			break
-		}
+	for len(startArray) > 0 {
 		theBigNextSteps := []Point{}
 		for _, current := range startArray {
 			if current.Height == 9 {
@@ -66,6 +69,7 @@ func (t *Terrain) Walk(start Point) map[string]int {
 	return endPoints
 }
 
+// Step takes as single step
 func (t *Terrain) Step(start Point) []Point {
 	limit := len(t.XY)
 	targetHeight := start.Height + 1 // Step up

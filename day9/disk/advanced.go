@@ -1,7 +1,9 @@
+// Package disk is the disc drive
 package disk
 
 const space = -1
 
+// NewAdvancedDisk returns an advanced version of the drive
 func NewAdvancedDisk(code []int) Disk {
 	blocks := make(map[int]block)
 	disc := AdvancedDisk{blocks: blocks}
@@ -30,11 +32,13 @@ func NewAdvancedDisk(code []int) Disk {
 	return &disc
 }
 
+// AdvancedDisk is the advanced version of the drive
 type AdvancedDisk struct {
 	blocks map[int]block // index is the position
 	maxKey int
 }
 
+// Compress compresses an advanced disk
 func (d *AdvancedDisk) Compress() {
 	maximum := d.maxKey
 	for i := maximum; i > 0; i-- {
@@ -42,6 +46,7 @@ func (d *AdvancedDisk) Compress() {
 	}
 }
 
+// Checksum gets the checksum of an advanced disk
 func (d *AdvancedDisk) Checksum() int {
 	checksum := 0
 	for k, block := range d.blocks {
@@ -80,21 +85,22 @@ type block struct {
 	length int
 }
 
+// AddBlock adds a single block
 func (d *AdvancedDisk) AddBlock(index, name, length int) {
-	block := block{name, length}
-	d.blocks[index] = block
+	b := block{name, length}
+	d.blocks[index] = b
 }
 
 func (d *AdvancedDisk) moveLeft(name int) {
 	index := d.find(name)
-	block := d.blocks[index]
-	spaceIndex := d.findSpace(block.length, index)
+	b := d.blocks[index]
+	spaceIndex := d.findSpace(b.length, index)
 	if spaceIndex < 0 {
 		return // Do nothing
 	}
 	// do the move
 	delete(d.blocks, index)
-	d.AddBlock(spaceIndex, block.name, block.length)
+	d.AddBlock(spaceIndex, b.name, b.length)
 }
 
 func (d *AdvancedDisk) find(name int) int {
@@ -118,11 +124,11 @@ func (d *AdvancedDisk) findSpace(size, maxIndex int) int {
 		if i >= maxIndex {
 			return -1
 		}
-		block, ok := d.blocks[i]
+		b, ok := d.blocks[i]
 		if ok {
 			inSpace = false
 			spaceLength = 0
-			i += block.length // jump ahead
+			i += b.length // jump ahead
 			continue
 		}
 		if !ok { // it's a space

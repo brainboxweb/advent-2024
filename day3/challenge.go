@@ -1,3 +1,4 @@
+// Package day3 is AOC Day 3
 package day3
 
 import (
@@ -8,6 +9,7 @@ import (
 var rx = regexp.MustCompile(`(mul)\((\d+)\,(\d+)\)`)
 var rx2 = regexp.MustCompile(`(mul)\((\d+)\,(\d+)\)|do\(\)|don't\(\)`)
 
+// ChallengeOne is Part 1
 func ChallengeOne(data string) int {
 	matches := rx.FindAllStringSubmatch(data, -1)
 	ret := 0
@@ -20,6 +22,7 @@ func ChallengeOne(data string) int {
 	return ret
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data string) int {
 	matches := rx2.FindAllStringSubmatch(data, -1)
 	ret := 0

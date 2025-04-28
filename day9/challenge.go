@@ -1,3 +1,4 @@
+// Package day9 is AOC Day 9
 package day9
 
 import (
@@ -6,6 +7,7 @@ import (
 	"github.com/brainboxweb/advent-2024/day9/disk"
 )
 
+// ChallengeOne is Part 1
 func ChallengeOne(data string) int {
 	code := toIntSlice(data)
 	theDisk := disk.NewBasicDisk(code)
@@ -14,6 +16,7 @@ func ChallengeOne(data string) int {
 	return theDisk.Checksum()
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data string) int {
 	code := toIntSlice(data)
 	theDisk := disk.NewAdvancedDisk(code)

@@ -1,14 +1,17 @@
+// Package roof describes the roof
 package roof
 
 import (
 	"fmt"
 )
 
+// Point is a unique location
 type Point struct {
 	X int
 	Y int
 }
 
+// Grid is were the antennae are located
 type Grid struct {
 	GridSize      int
 	Antennas      map[string][]Point
@@ -16,6 +19,7 @@ type Grid struct {
 	comprehensive bool
 }
 
+// NewGrid returns a new Grid object
 func NewGrid(data [][]string) *Grid {
 	gridSize := len(data[0])
 	antennas := antennas(data)
@@ -26,6 +30,29 @@ func NewGrid(data [][]string) *Grid {
 	}
 
 	return &Grid{GridSize: gridSize, Antennas: antennas, Pairs: pairs}
+}
+
+// AntinodesComprehensive is the advanced version of Antinodes
+func (g *Grid) AntinodesComprehensive() map[string]Point {
+	g.comprehensive = true
+	return g.Antinodes()
+}
+
+// Antinodes are the antenna antinodes
+func (g *Grid) Antinodes() map[string]Point {
+	antis := []Point{}
+	for _, pair := range g.Pairs {
+		ans := g.antinodesForPair(pair)
+		antis = append(antis, ans...)
+	}
+
+	// ---- dedupe
+	antinodes := make(map[string]Point)
+	for _, ant := range antis {
+		key := fmt.Sprintf("%d-%d", ant.X, ant.Y)
+		antinodes[key] = ant
+	}
+	return antinodes
 }
 
 func antennas(grid [][]string) map[string][]Point {
@@ -41,27 +68,6 @@ func antennas(grid [][]string) map[string][]Point {
 	}
 
 	return points
-}
-
-func (g *Grid) AntinodesComprehensive() map[string]Point {
-	g.comprehensive = true
-	return g.Antinodes()
-}
-
-func (g *Grid) Antinodes() map[string]Point {
-	antis := []Point{}
-	for _, pair := range g.Pairs {
-		ans := g.antinodesForPair(pair)
-		antis = append(antis, ans...)
-	}
-
-	// ---- dedupe
-	antinodes := make(map[string]Point)
-	for _, ant := range antis {
-		key := fmt.Sprintf("%d-%d", ant.X, ant.Y)
-		antinodes[key] = ant
-	}
-	return antinodes
 }
 
 func (g *Grid) antinodesForPair(pair []Point) []Point {

@@ -1,3 +1,4 @@
+// Package calculations contains the calculator
 package calculations
 
 import (
@@ -5,14 +6,17 @@ import (
 	"strconv"
 )
 
+// NewCalculator returns a Calculator
 func NewCalculator(operators []string) *Calculator {
 	return &Calculator{Operators: operators}
 }
 
+// Calculator does the calculations
 type Calculator struct {
 	Operators []string
 }
 
+// Calculate performs the operations
 func (c Calculator) Calculate(subtotal int, operands []int) []int {
 	return calcRecursive([]int{subtotal}, operands, c.Operators)
 }

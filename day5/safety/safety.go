@@ -1,15 +1,19 @@
+// Package safety contains the Safety Manual
 package safety
 
+// Manual contains the rules
 type Manual struct {
 	rules [][]int
 }
 
+// NewManual returns a new Manual
 func NewManual(ordering [][]int) *Manual {
 	manual := Manual{rules: ordering}
 
 	return &manual
 }
 
+// ValidateOrder validates the order
 func (t *Manual) ValidateOrder(update []int) bool {
 	applicableRules := t.findApplicableRules(update)
 	for _, rule := range applicableRules {
@@ -40,6 +44,7 @@ func applyRule(update []int, rule []int) bool {
 	return passed
 }
 
+// FixUpdate corrects the Update
 func (t *Manual) FixUpdate(update []int) []int {
 	applicableRules := t.findApplicableRules(update)
 LOOP:

@@ -1,3 +1,4 @@
+// Package stones is where the stones live ;)
 package stones
 
 import (
@@ -6,6 +7,7 @@ import (
 	"strings"
 )
 
+// NewStoneSet returns a Stone Set
 func NewStoneSet(data string) *Set {
 	stones := parse(data)
 	stonesMap := make(map[int]int)
@@ -16,11 +18,13 @@ func NewStoneSet(data string) *Set {
 	return &Set{stones, stonesMap}
 }
 
+// Set contains the stones
 type Set struct {
 	stones    []int
 	stonesMap map[int]int
 }
 
+// Blinks performs a series of blinks
 func (ss *Set) Blinks(blinkCount int) int {
 	for range blinkCount {
 		ss.blink()
@@ -55,9 +59,8 @@ func (ss *Set) blink() {
 	}
 }
 
-var cache = make(map[int][]int)
-
 func applyRules(input int) []int {
+	var cache = make(map[int][]int)
 	if input == 0 { // --------------- If 0
 		return []int{1}
 	}
