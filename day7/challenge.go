@@ -1,3 +1,4 @@
+// Package day7 is AOC Day 7
 package day7
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/brainboxweb/advent-2024/day7/calculations"
 )
 
+// ChallengeOne is Part 1
 func ChallengeOne(data []string) int {
 	equations := parse(data)
 	operators := []string{"*", "+"}
@@ -14,6 +16,7 @@ func ChallengeOne(data []string) int {
 	return run(equations, operators)
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data []string) int {
 	equations := parse(data)
 	operators := []string{"*", "+", "||"}

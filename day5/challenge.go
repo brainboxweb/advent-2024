@@ -1,3 +1,4 @@
+// Package day5 is AOC Day 5
 package day5
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/brainboxweb/advent-2024/day5/safety"
 )
 
+// ChallengeOne is Part 1
 func ChallengeOne(data []string) int {
 	rules, updates := parse(data)
 	manual := safety.NewManual(rules)
@@ -20,6 +22,7 @@ func ChallengeOne(data []string) int {
 	return getScore(selected)
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data []string) int {
 	rules, updates := parse(data)
 	manual := safety.NewManual(rules)

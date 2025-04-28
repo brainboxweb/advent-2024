@@ -1,9 +1,11 @@
+// Package location relates to the map
 package location
 
 import (
 	"fmt"
 )
 
+// NewMap returns a new Map
 func NewMap(data [][]string) *Map {
 	visited := make(map[string]Point)
 	m := Map{
@@ -22,22 +24,13 @@ func NewMap(data [][]string) *Map {
 	return &m
 }
 
-func (m *Map) findChar(char string) (x, y int) {
-	for x := range m.lenY {
-		for y := range m.lenY {
-			if m.grid[x][y] == char {
-				return x, y
-			}
-		}
-	}
-
-	return 0, 0
-}
-
+// Point is an x, y location
 type Point struct {
 	X int
 	Y int
 }
+
+// Map is area of terrain
 type Map struct {
 	grid         [][]string
 	lenX         int
@@ -49,6 +42,7 @@ type Map struct {
 	visitedCount int
 }
 
+// Move runs a series of moves
 func (m *Map) Move() int {
 	for {
 		stillMoving := m.moveInDirection(m.direction)
@@ -60,6 +54,7 @@ func (m *Map) Move() int {
 	return len(m.visited)
 }
 
+// IsEndlessLoop tests for leakage
 func (m *Map) IsEndlessLoop() bool {
 	for {
 		if m.visitedCount > len(m.grid)*50 { // endless loop
@@ -69,6 +64,18 @@ func (m *Map) IsEndlessLoop() bool {
 			return false // leaked out of the grid
 		}
 	}
+}
+
+func (m *Map) findChar(char string) (x, y int) {
+	for x := range m.lenY {
+		for y := range m.lenY {
+			if m.grid[x][y] == char {
+				return x, y
+			}
+		}
+	}
+
+	return 0, 0
 }
 
 func (m *Map) moveInDirection(dirn string) bool {

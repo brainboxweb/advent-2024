@@ -1,18 +1,22 @@
+// Package disk is the disc drive
 package disk
 
 import (
 	"errors"
 )
 
+// NewBasicDisk returns a basic disc
 func NewBasicDisk(code []int) Disk {
 	disk := buildBasicDisc(code)
 	return &BasicDisk{disk: disk}
 }
 
+// BasicDisk represents a basic disk
 type BasicDisk struct {
 	disk []int
 }
 
+// Compress compresses a simple disk
 func (d *BasicDisk) Compress() {
 	for {
 		_, err := moveLeft(d.disk)
@@ -22,6 +26,7 @@ func (d *BasicDisk) Compress() {
 	}
 }
 
+// Checksum gets the checksum of a simple disk
 func (d *BasicDisk) Checksum() int {
 	checksum := 0
 	for k, val := range d.disk {
@@ -53,7 +58,7 @@ func moveLeft(data []int) ([]int, error) {
 	}
 	// End condition
 	if fromIndex-toIndex < 2 {
-		return nil, errors.New("No change")
+		return nil, errors.New("no change")
 	}
 	// Update the entries
 	data[fromIndex] = space

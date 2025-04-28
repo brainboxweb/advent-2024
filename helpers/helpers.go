@@ -1,13 +1,17 @@
+// Package helpers contains useful tools
 package helpers
 
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
 
+// ReverseSlice reverses a slice
 func ReverseSlice(s []string) []string {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
@@ -15,6 +19,7 @@ func ReverseSlice(s []string) []string {
 	return s
 }
 
+// ReverseSliceOfSlices reverses a slice of slices
 func ReverseSliceOfSlices(s [][]string) [][]string {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
@@ -22,6 +27,7 @@ func ReverseSliceOfSlices(s [][]string) [][]string {
 	return s
 }
 
+// TransposeSliceOfSlices transposes a slice of slices
 func TransposeSliceOfSlices(slice [][]string) [][]string {
 	xl := len(slice[0])
 	yl := len(slice)
@@ -38,12 +44,13 @@ func TransposeSliceOfSlices(slice [][]string) [][]string {
 	return result
 }
 
+// GetDataString returns a slice of strings from a file
 func GetDataString(filename string) []string {
-	file, err := os.Open(filename)
+	file, err := os.Open(filepath.Clean(filename))
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+	defer checkClose(file, &err)
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 	var ret []string
@@ -54,6 +61,7 @@ func GetDataString(filename string) []string {
 	return ret
 }
 
+// GetDataInt returns a slice of ints from a file
 func GetDataInt(filename string) ([]int, error) {
 	data := GetDataString(filename)
 	var ret []int
@@ -68,6 +76,7 @@ func GetDataInt(filename string) ([]int, error) {
 	return ret, nil
 }
 
+// ToXY converts lines to an XY grid
 func ToXY(data []string) [][]string {
 	limit := len(data)
 	sliceOfSlices := make([][]string, limit)
@@ -81,9 +90,17 @@ func ToXY(data []string) [][]string {
 	return TransposeSliceOfSlices(sliceOfSlices)
 }
 
+// DumpXY prints an XY grid
 func DumpXY(data [][]string) {
 	printable := TransposeSliceOfSlices(data)
 	for _, line := range printable {
 		_, _ = fmt.Println(strings.Join(line, ""))
+	}
+}
+
+func checkClose(c io.Closer, err *error) {
+	cerr := c.Close()
+	if *err == nil {
+		*err = cerr
 	}
 }

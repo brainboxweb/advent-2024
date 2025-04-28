@@ -1,9 +1,11 @@
+// Package day6 is AOC Day 6
 package day6
 
 import (
 	"github.com/brainboxweb/advent-2024/day6/location"
 )
 
+// ChallengeOne is Part 1
 func ChallengeOne(data [][]string) int {
 	theMap := location.NewMap(data)
 	res := theMap.Move()
@@ -11,6 +13,7 @@ func ChallengeOne(data [][]string) int {
 	return res
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data [][]string) int {
 	counter := 0
 	for y := range len(data[0]) {

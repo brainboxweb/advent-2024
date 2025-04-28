@@ -1,3 +1,4 @@
+// Package day2 is AOC Day 2
 package day2
 
 import (
@@ -5,6 +6,7 @@ import (
 	"strings"
 )
 
+// ChallengeOne is part 1 of the challenge
 func ChallengeOne(data []string) int {
 	reports := parse(data)
 	count := 0
@@ -17,6 +19,8 @@ func ChallengeOne(data []string) int {
 	return count
 }
 
+// ChallengeTwo is part 2 of the challenge
+//
 //revive:disable:cognitive-complexity
 func ChallengeTwo(data []string) int {
 	reports := parse(data)

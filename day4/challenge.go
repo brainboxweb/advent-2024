@@ -1,3 +1,4 @@
+// Package day4 is AOC Day 4
 package day4
 
 import (
@@ -10,6 +11,7 @@ import (
 var rx = regexp.MustCompile("XMAS")
 var rx2 = regexp.MustCompile("SAMX")
 
+// ChallengeOne is Part 1
 func ChallengeOne(data []string) int {
 	square := getSquare(data)
 	count := 0
@@ -21,6 +23,7 @@ func ChallengeOne(data []string) int {
 	return count
 }
 
+// ChallengeTwo is Part 2
 func ChallengeTwo(data []string) int {
 	square := getSquare(data)
 	maximum := len(square[0])
