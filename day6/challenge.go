@@ -17,7 +17,7 @@ func ChallengeOne(data [][]string) int {
 func ChallengeTwo(data [][]string) int {
 	counter := 0
 	for y := range len(data[0]) {
-		for x := range len(data) {
+		for x := range data {
 			altData := makeVariation(data, x, y)
 			theMap := location.NewMap(altData)
 			isLoop := theMap.IsEndlessLoop()

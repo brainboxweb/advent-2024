@@ -2,7 +2,6 @@
 package stones
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -68,7 +67,7 @@ func applyRules(input int) []int {
 	if ok {
 		return val
 	}
-	str := fmt.Sprint(input) // ------ If even no. of digits
+	str := strconv.Itoa(input) // ------ If even no. of digits
 	length := len(str)
 	if length%2 == 0 {
 		part1 := str[:(length / 2)]
