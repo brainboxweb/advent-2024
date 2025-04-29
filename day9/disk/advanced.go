@@ -63,8 +63,8 @@ func buildAdvancedDisc(code []int) []int {
 	disk := []int{}
 	id := -1
 	isFile := false
-	next := 0
 	for _, val := range code {
+		var next int
 		isFile = !isFile
 		if isFile {
 			id++
