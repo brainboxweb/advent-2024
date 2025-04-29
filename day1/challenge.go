@@ -13,7 +13,7 @@ func ChallengeOne(data []string) int {
 	sort.Ints(one)
 	sort.Ints(two)
 	diff := 0
-	for i := 0; i < len(one); i++ {
+	for i := range one {
 		d := one[i] - two[i]
 		if d < 0 {
 			d *= -1

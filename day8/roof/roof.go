@@ -58,7 +58,7 @@ func (g *Grid) Antinodes() map[string]Point {
 func antennas(grid [][]string) map[string][]Point {
 	points := make(map[string][]Point)
 	for y := range len(grid[0]) { // collect everything that's not a dot
-		for x := range len(grid) {
+		for x := range grid {
 			if grid[x][y] != "." {
 				val := grid[x][y]
 				pp := Point{x, y}

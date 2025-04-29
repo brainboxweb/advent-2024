@@ -72,59 +72,59 @@ linters:
     # - canonicalheader # checks whether net/http.Header uses canonical header
     # - copyloopvar # detects places where loop variables are copied (Go 1.22+)
     # - cyclop # checks function and package cyclomatic complexity
-    # - depguard # checks if package imports are in a list of acceptable packages
+    - depguard # checks if package imports are in a list of acceptable packages
     - dupl # tool for code clone detection
-    # - durationcheck # checks for two durations multiplied together
-    # - errcheck # checking for unchecked errors, these unchecked errors can be critical bugs in some cases
-    # - errname # checks that sentinel errors are prefixed with the Err and error types are suffixed with the Error
-    # - errorlint # finds code that will cause problems with the error wrapping scheme introduced in Go 1.13
-    # - exhaustive # checks exhaustiveness of enum switch statements
-    # - exptostd # detects functions from golang.org/x/exp/ that can be replaced by std functions
-    # - fatcontext # detects nested contexts in loops
+    - durationcheck # checks for two durations multiplied together
+    - errcheck # checking for unchecked errors, these unchecked errors can be critical bugs in some cases
+    - errname # checks that sentinel errors are prefixed with the Err and error types are suffixed with the Error
+    - errorlint # finds code that will cause problems with the error wrapping scheme introduced in Go 1.13
+    - exhaustive # checks exhaustiveness of enum switch statements
+    - exptostd # detects functions from golang.org/x/exp/ that can be replaced by std functions
+    - fatcontext # detects nested contexts in loops
     # - forbidigo # forbids identifiers
-    # # - funcorder # checks the order of functions, methods, and constructors
-    # - funlen # tool for detection of long functions
-    # - gocheckcompilerdirectives # validates go compiler directive comments (//go:)
+    # - funcorder # checks the order of functions, methods, and constructors
+    - funlen # tool for detection of long functions
+    - gocheckcompilerdirectives # validates go compiler directive comments (//go:)
     - gochecknoglobals # checks that no global variables exist
     - gochecknoinits # checks that no init functions are present in Go code
-    # - gochecksumtype # checks exhaustiveness on Go "sum types"
-    # - gocognit # computes and checks the cognitive complexity of functions
-    # - goconst # finds repeated strings that could be replaced by a constant
+    - gochecksumtype # checks exhaustiveness on Go "sum types"
+    - gocognit # computes and checks the cognitive complexity of functions
+    - goconst # finds repeated strings that could be replaced by a constant
     - gocritic # provides diagnostics that check for bugs, performance and style issues
     # - gocyclo # computes and checks the cyclomatic complexity of functions
     # - godot # checks if comments end in a period
-    # - gomoddirectives # manages the use of 'replace', 'retract', and 'excludes' directives in go.mod
-    # - goprintffuncname # checks that printf-like functions are named with f at the end
+    - gomoddirectives # manages the use of 'replace', 'retract', and 'excludes' directives in go.mod
+    - goprintffuncname # checks that printf-like functions are named with f at the end
     # - gosec # inspects source code for security problems
     # - govet # reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
-    # - iface # checks the incorrect use of interfaces, helping developers avoid interface pollution
-    # - ineffassign # detects when assignments to existing variables are not used
-    # - intrange # finds places where for loops could make use of an integer range
-    # - loggercheck # checks key value pairs for common logger libraries (kitlog,klog,logr,zap)
-    # - makezero # finds slice declarations with non-zero initial length
-    # - mirror # reports wrong mirror patterns of bytes/strings usage
+    - iface # checks the incorrect use of interfaces, helping developers avoid interface pollution
+    - ineffassign # detects when assignments to existing variables are not used
+    - intrange # finds places where for loops could make use of an integer range
+    - loggercheck # checks key value pairs for common logger libraries (kitlog,klog,logr,zap)
+    - makezero # finds slice declarations with non-zero initial length
+    - mirror # reports wrong mirror patterns of bytes/strings usage
     # - mnd # detects magic numbers
-    # - musttag # enforces field tags in (un)marshaled structs
+    - musttag # enforces field tags in (un)marshaled structs
     # - nakedret # finds naked returns in functions greater than a specified function length
     # - nestif # reports deeply nested if statements
-    # - nilerr # finds the code that returns nil even if it checks that the error is not nil
-    # - nilnesserr # reports that it checks for err != nil, but it returns a different nil value error (powered by nilness and nilerr)
-    # - nilnil # checks that there is no simultaneous return of nil error and an invalid value
-    # - noctx # finds sending http request without context.Context
+    - nilerr # finds the code that returns nil even if it checks that the error is not nil
+    - nilnesserr # reports that it checks for err != nil, but it returns a different nil value error (powered by nilness and nilerr)
+    - nilnil # checks that there is no simultaneous return of nil error and an invalid value
+    - noctx # finds sending http request without context.Context
     # - nolintlint # reports ill-formed or insufficient nolint directives
     # - nonamedreturns # reports all named returns
-    # - nosprintfhostport # checks for misuse of Sprintf to construct a host with port in a URL
-    # - perfsprint # checks that fmt.Sprintf can be replaced with a faster alternative
-    # - predeclared # finds code that shadows one of Go's predeclared identifiers
-    # - promlinter # checks Prometheus metrics naming via promlint
-    # - protogetter # reports direct reads from proto message fields when getters should be used
-    # - reassign # checks that package variables are not reassigned
-    # - recvcheck # checks for receiver type consistency
+    - nosprintfhostport # checks for misuse of Sprintf to construct a host with port in a URL
+    - perfsprint # checks that fmt.Sprintf can be replaced with a faster alternative
+    - predeclared # finds code that shadows one of Go's predeclared identifiers
+    - promlinter # checks Prometheus metrics naming via promlint
+    - protogetter # reports direct reads from proto message fields when getters should be used
+    - reassign # checks that package variables are not reassigned
+    - recvcheck # checks for receiver type consistency
     # - revive # fast, configurable, extensible, flexible, and beautiful linter for Go, drop-in replacement of golint
-    # - rowserrcheck # checks whether Err of rows is checked successfully
-    # - sloglint # ensure consistent code style when using log/slog
-    # - spancheck # checks for mistakes with OpenTelemetry/Census spans
-    # - sqlclosecheck # checks that sql.Rows and sql.Stmt are closed
+    - rowserrcheck # checks whether Err of rows is checked successfully
+    - sloglint # ensure consistent code style when using log/slog
+    - spancheck # checks for mistakes with OpenTelemetry/Census spans
+    - sqlclosecheck # checks that sql.Rows and sql.Stmt are closed
     - staticcheck # is a go vet on steroids, applying a ton of static analysis checks
     - testableexamples # checks if examples are testable (have an expected output)
     - testifylint # checks usage of github.com/stretchr/testify
@@ -176,6 +176,27 @@ linters:
 
   # All settings can be found here https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml
   settings:
+    revive:
+      # Maximum number of open files at the same time.
+      # See https://github.com/mgechev/revive#command-line-flags
+      # Defaults to unlimited.
+      max-open-files: 2048
+      # Sets the default severity.
+      # See https://github.com/mgechev/revive#configuration
+      # Default: warning
+      severity: error
+      # Enable all available rules.
+      # Default: false
+      enable-all-rules: true
+      rules:
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
+        - name: add-constant
+          disabled: true
+        - name: cognitive-complexity
+          # severity: warning
+          # disabled: false
+          # exclude: [""]
+          arguments: [10]
     cyclop:
       # The maximal code complexity to report.
       # Default: 10
@@ -184,7 +205,6 @@ linters:
       # If it's higher than 0.0 (float) the check is enabled.
       # Default: 0.0
       package-average: 10.0
-
     depguard:
       # Rules to apply.
       #

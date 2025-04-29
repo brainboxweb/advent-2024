@@ -19,9 +19,9 @@ func ChallengeOne(data []string) int {
 	return count
 }
 
-// ChallengeTwo is part 2 of the challenge
-//
 //revive:disable:cognitive-complexity
+
+// ChallengeTwo is part 2 of the challenge
 func ChallengeTwo(data []string) int {
 	reports := parse(data)
 	count := 0
@@ -31,7 +31,7 @@ OUTER:
 			count++
 			continue
 		}
-		for i := range len(report) {
+		for i := range report {
 			rep := dropElement(report, i)
 			if isSafe(rep) {
 				count++
@@ -47,7 +47,7 @@ OUTER:
 
 func dropElement(report []int, element int) []int {
 	ret := []int{}
-	for i := range len(report) {
+	for i := range report {
 		if i == element {
 			continue
 		}

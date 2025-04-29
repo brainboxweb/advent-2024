@@ -29,7 +29,7 @@ func (t *Manual) ValidateOrder(update []int) bool {
 func applyRule(update []int, rule []int) bool {
 	isCandidate := false
 	passed := false
-	for i := range len(update) {
+	for i := range update {
 		if update[i] == rule[0] {
 			isCandidate = true
 			continue
