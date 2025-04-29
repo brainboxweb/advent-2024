@@ -24,16 +24,15 @@ func (c Calculator) Calculate(subtotal int, operands []int) []int {
 func calcRecursive(subtotals []int, operands []int, operators []string) []int {
 	for i, subtotal := range subtotals {
 		for _, operator := range operators {
-			output := 0
 			switch operator {
 			case "*":
-				output = multiply(subtotal, operands[0])
+				output := multiply(subtotal, operands[0])
 				subtotals[i] = output // update
 			case "+":
-				output = add(subtotal, operands[0])
+				output := add(subtotal, operands[0])
 				subtotals = append(subtotals, output) // add new
 			case "||":
-				output = concatenate(subtotal, operands[0])
+				output := concatenate(subtotal, operands[0])
 				subtotals = append(subtotals, output) // add new
 			default:
 				panic("not implemented")

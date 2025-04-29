@@ -71,9 +71,9 @@ func buildBasicDisc(code []int) []int {
 	disk := []int{}
 	id := -1
 	isFile := false
-	next := 0
 	for _, val := range code {
 		isFile = !isFile
+		var next int
 		if isFile {
 			id++
 			next = id
