@@ -20,11 +20,10 @@ func TestChallenge(t *testing.T) {
 			140,
 		},
 		{
-			"day12_test1.txt",
-			772,
+			"day12.txt",
+			1522850,
 		},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.dataFile, func(t *testing.T) {
 			data := helpers.GetDataString(testDataPath + tt.dataFile)
