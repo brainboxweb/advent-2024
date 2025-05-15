@@ -8,7 +8,7 @@ import (
 	"github.com/brainboxweb/advent-2024/day14/bathroom"
 )
 
-// ChallengeOne is part one
+// ChallengeOne is part one of today's challenge
 func ChallengeOne(data []string, lengthX, lengthY, stepCount int) int {
 	isle := bathroom.New(lengthX, lengthY)
 	for _, robotData := range data {
@@ -22,6 +22,16 @@ func ChallengeOne(data []string, lengthX, lengthY, stepCount int) int {
 		ret *= total
 	}
 	return ret
+}
+
+// ChallengeTwo is part two of today's challenge
+func ChallengeTwo(data []string, lengthX, lengthY int) int {
+	isle := bathroom.New(lengthX, lengthY)
+	for _, robotData := range data {
+		point, velocity := parse(robotData)
+		isle.AddRobot(point.x, point.y, velocity.x, velocity.y)
+	}
+	return isle.StepNoOverlap()
 }
 
 func parse(input string) (point, velocity) {

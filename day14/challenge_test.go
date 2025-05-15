@@ -39,3 +39,27 @@ func TestChallenge(t *testing.T) {
 		})
 	}
 }
+
+// Assumption: no robot overlap
+func TestChallengeTwo(t *testing.T) {
+	tests := []struct {
+		dataFile string
+		maxX     int
+		maxY     int
+		expected int
+	}{
+		{
+			"../testdata/day14.txt",
+			101,
+			103,
+			7858,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.dataFile, func(t *testing.T) {
+			data := helpers.GetDataString(tt.dataFile)
+			result := day14.ChallengeTwo(data, tt.maxX, tt.maxY)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}

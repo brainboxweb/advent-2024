@@ -1,6 +1,10 @@
 // Package bathroom represents the bathroom
 package bathroom
 
+import (
+	"fmt"
+)
+
 // New return a new bathroom
 func New(lenX, lenY int) *Bathroom {
 	return &Bathroom{lenX: lenX, lenY: lenY}
@@ -27,14 +31,47 @@ type Bathroom struct {
 
 // Step increments the steps for ALL of the robots
 func (b *Bathroom) Step(stepCount int) {
-	for _, rob := range b.robots {
-		for range stepCount {
-			rob.step(b.lenX, b.lenY) // make naming consistent
+	for range stepCount {
+		for _, rob := range b.robots {
+			rob.step(b.lenX, b.lenY)
 		}
 	}
 }
 
+// StepNoOverlap return number of steps to no overlapping robots
+func (b *Bathroom) StepNoOverlap() int {
+	stepCount := 0
+	for {
+		stepCount++
+		for _, rob := range b.robots {
+			rob.step(b.lenX, b.lenY)
+		}
+		if !b.hasOverlap() {
+			break
+		}
+	}
+	return stepCount
+}
+
 //revive:disable:cognitive-complexity
+
+func (b *Bathroom) hasOverlap() bool {
+	overlaps := make(map[string]int) // index, count
+	for y := range b.lenY {
+		for x := range b.lenX {
+			for _, rob := range b.robots {
+				if x == rob.x && y == rob.y {
+					index := fmt.Sprint(x, "_", y)
+					overlaps[index]++
+					if overlaps[index] > 1 {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
 
 // CountQuadrants counts the robots in each quadrant
 func (b *Bathroom) CountQuadrants() map[int]int {
@@ -95,3 +132,28 @@ func increment(val, increment, length int) int {
 	}
 	return val
 }
+
+// For visualising Part 2
+// func (b *Bathroom) dump(stepNumber int) {
+// 	fmt.Println("----- ", stepNumber)
+// 	for y := range b.lenY {
+// 		line := ""
+// 		for x := range b.lenX {
+// 			match := false
+// 			for _, rob := range b.robots {
+// 				if x == rob.x && y == rob.y {
+// 					match = true
+// 					continue
+// 				}
+// 			}
+// 			if match == true {
+// 				line = line + "*"
+// 			} else {
+// 				line = line + "."
+// 			}
+// 		}
+// 		if stepNumber > 3000 {
+// 			fmt.Println(line)
+// 		}
+// 	}
+// }
