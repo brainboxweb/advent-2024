@@ -2,8 +2,13 @@
 package maze
 
 import (
-	"fmt"
+	"slices"
 	"strings"
+)
+
+const (
+	stepCost = 1
+	turnCost = 1000
 )
 
 // New return a new warehouse
@@ -27,25 +32,32 @@ func New(data []string) *Maze {
 	return mz
 }
 
-// Solve solves the maze with minmium cost
-func (mz *Maze) Solve() int {
-	startVector := moveVector{
-		point:     mz.startPoint,
-		direction: direction{x: 1, y: 0}, // Start moving right
-	}
-	return mz.step(startVector)
-}
-
 // Maze represents the maze
 type Maze struct {
 	allowed        [][]bool
 	startPoint     point
 	endPoint       point
-	moveVectorCost map[moveVector]int // moveVector, lowest cost
+	moveVectorCost map[moveVector]int
 }
 
-func (mz *Maze) getCost(mv moveVector) int {
-	key := moveVector{mv.point, mv.direction, 0} // NB
+// Solve solves the maze with minmium cost
+func (mz *Maze) Solve() Result {
+	startPoint := mz.startPoint
+	startDirection := direction{x: 1, y: 0} // Start moving right
+	startVectorSimple := moveVector{startPoint, startDirection}
+	startVector := moveVectorLoaded{
+		moveVector: moveVector{
+			point:     startPoint,
+			direction: startDirection,
+		},
+		cost:    0,
+		history: []moveVector{startVectorSimple},
+	}
+	return mz.step(startVector)
+}
+
+func (mz *Maze) getCost(mv moveVectorLoaded) int {
+	key := moveVector{mv.point, mv.direction} // NB
 	val, ok := mz.moveVectorCost[key]
 	if !ok {
 		return 100000000
@@ -53,26 +65,23 @@ func (mz *Maze) getCost(mv moveVector) int {
 	return val
 }
 
-func (mz *Maze) setCost(mv moveVector) {
-	key := moveVector{mv.point, mv.direction, 0} // NB
+func (mz *Maze) setCost(mv moveVectorLoaded) {
+	key := moveVector{mv.point, mv.direction} // NB
 	mz.moveVectorCost[key] = mv.cost
 }
 
 //revive:disable:cognitive-complexity
-func (mz *Maze) step(startMove moveVector) int {
-	startMoves := []moveVector{}
+func (mz *Maze) step(startMove moveVectorLoaded) Result {
+	startMoves := []moveVectorLoaded{}
 	startMoves = append(startMoves, startMove)
-	endPointRoutes := []moveVector{}
-	for len(startMoves) > 0 {
-		// if len(startMoves) == 0 { // End condition
-		// 	break
-		// }
-		newStartMoves := []moveVector{}
+	successVectors := []moveVectorLoaded{}
+	for len(startMoves) > 0 { // end condition
+		newStartMoves := []moveVectorLoaded{}
 		for _, startMove := range startMoves {
 			targets := mz.getTargets(startMove)
 			for _, target := range targets {
 				if target.point == mz.endPoint {
-					endPointRoutes = append(endPointRoutes, target)
+					successVectors = append(successVectors, target)
 					break
 				}
 				newStartMoves = append(newStartMoves, target)
@@ -81,13 +90,44 @@ func (mz *Maze) step(startMove moveVector) int {
 		// Prepare to loop
 		startMoves = newStartMoves
 	}
+	minCost := minCost(successVectors)
+	winningPathCount := winningPathCount(successVectors, minCost)
+
+	return Result{minCost, winningPathCount}
+}
+
+// Result includes MinCost and the WinningPathCount
+type Result struct {
+	MinCost          int
+	WinningPathCount int
+}
+
+func minCost(successVectors []moveVectorLoaded) int {
 	minCost := 10000000
-	for _, ep := range endPointRoutes {
+	for _, ep := range successVectors {
 		if ep.cost < minCost {
 			minCost = ep.cost
 		}
 	}
 	return minCost
+}
+
+func winningPathCount(successVectors []moveVectorLoaded, minCost int) int {
+	winningPointSequences := [][]moveVector{}
+	for _, ep := range successVectors {
+		if ep.cost == minCost {
+			winningPointSequences = append(winningPointSequences, ep.history)
+		}
+	}
+
+	unique := make(map[point]bool)
+	for _, sequ := range winningPointSequences {
+		for _, vec := range sequ {
+			unique[vec.point] = true
+		}
+	}
+
+	return len(unique)
 }
 
 //revive:enable:cognitive-complexity
@@ -96,45 +136,22 @@ func (mz *Maze) isAllowed(candidate point) bool {
 	return mz.allowed[candidate.y][candidate.x]
 }
 
-func (mz *Maze) getTargets(mv moveVector) []moveVector {
-	targetMoveVectors := []moveVector{}
-	var left direction
-	var right direction
-	switch {
-	case mv.direction.y == 0:
-		left = direction{0, 1}
-		right = direction{0, -1}
-	case mv.direction.x == 0:
-		left = direction{-1, 0}
-		right = direction{1, 0}
-	}
-	strPoint := point{mv.point.x + mv.direction.x, mv.point.y + mv.direction.y}
-	leftPoint := point{mv.point.x + left.x, mv.point.y + left.y}
-	rightPoint := point{mv.point.x + right.x, mv.point.y + right.y}
+// think I need refererences!!!!!
+func (mz *Maze) getTargets(mv moveVectorLoaded) []moveVectorLoaded {
+	candidates := mv.getCandidates()
 
-	// Allowed?
-	if mz.isAllowed(strPoint) {
-		targetMoveVectors = append(targetMoveVectors,
-			moveVector{strPoint, mv.direction, mv.cost + 1})
-	}
-	if mz.isAllowed(leftPoint) {
-		targetMoveVectors = append(targetMoveVectors,
-			moveVector{leftPoint, left, mv.cost + 1001})
-	}
-	if mz.isAllowed(rightPoint) {
-		targetMoveVectors = append(targetMoveVectors,
-			moveVector{rightPoint, right, mv.cost + 1001})
-	}
-
-	// Cheapest?
-	cheapMoveVectors := []moveVector{}
-	for _, mv := range targetMoveVectors {
-		lowestCost := mz.getCost(mv)
-		if mv.cost > lowestCost {
-			continue // drop this route
+	// valid? Cheapest?
+	cheapMoveVectors := []moveVectorLoaded{}
+	for _, candidate := range candidates {
+		if !mz.isAllowed(candidate.point) {
+			continue
 		}
-		mz.setCost(mv)                                  // set/update the cost
-		cheapMoveVectors = append(cheapMoveVectors, mv) // add
+		lowestCost := mz.getCost(candidate)
+		if candidate.cost > lowestCost {
+			continue // drop this route (too expensive)
+		}
+		mz.setCost(candidate)
+		cheapMoveVectors = append(cheapMoveVectors, candidate)
 	}
 
 	return cheapMoveVectors
@@ -153,7 +170,83 @@ type direction struct {
 type moveVector struct {
 	point
 	direction
-	cost int
+}
+
+type moveVectorLoaded struct {
+	moveVector
+	cost    int
+	history []moveVector
+}
+
+// get THREE candndates from the current one
+// don't worry about valid / cheap. just get three
+func (originMV moveVectorLoaded) getCandidates() []moveVectorLoaded {
+	candidates := []moveVectorLoaded{}
+	var left direction
+	var right direction
+	switch {
+	case originMV.direction.y == 0:
+		left = direction{0, 1}
+		right = direction{0, -1}
+	case originMV.direction.x == 0:
+		left = direction{-1, 0}
+		right = direction{1, 0}
+	}
+	targetNames := []string{"straight", "left", "right"}
+	for _, targetName := range targetNames {
+		var newPoint point
+		var newVector moveVector
+		costIncrement := 0
+		switch targetName {
+		case "straight":
+			newPoint = point{originMV.point.x + originMV.direction.x,
+				originMV.point.y + originMV.direction.y}
+			newVector = moveVector{
+				newPoint,
+				originMV.direction,
+			}
+			costIncrement = stepCost
+		case "left":
+			newPoint = point{
+				originMV.point.x + left.x,
+				originMV.point.y + left.y,
+			}
+			newVector = moveVector{
+				newPoint,
+				direction{x: left.x, y: left.y},
+			}
+			costIncrement = stepCost + turnCost
+		case "right":
+			newPoint = point{
+				originMV.point.x + right.x,
+				originMV.point.y + right.y,
+			}
+			newVector = moveVector{
+				newPoint,
+				direction{x: right.x, y: right.y},
+			}
+			costIncrement = stepCost + turnCost
+		}
+
+		newCandidate := buildNewCandidate(originMV, newVector, costIncrement)
+		candidates = append(candidates, newCandidate)
+	}
+	return candidates
+}
+
+func buildNewCandidate(
+	originMV moveVectorLoaded,
+	newVector moveVector,
+	costIncrement int) moveVectorLoaded {
+	newHistory := slices.Clone(originMV.history)
+	newHistory = append(newHistory, newVector)
+	newCandidate := moveVectorLoaded{
+		moveVector: newVector,
+		cost:       originMV.cost + costIncrement,
+		history:    newHistory,
+	}
+
+	return newCandidate
 }
 
 func (mz *Maze) populateAllowed(limit int) {
@@ -169,24 +262,68 @@ func (mz *Maze) populateAllowed(limit int) {
 	mz.allowed = sliceOfSlices
 }
 
-// Dump is for debugging
-func (mz *Maze) Dump() {
-	maxLen := len(mz.allowed)
-	for y := range maxLen {
-		line := ""
-		for x := range maxLen {
-			candidate := "#"
-			if mz.allowed[y][x] {
-				candidate = "."
-			}
-			switch {
-			case mz.startPoint == point{x, y}:
-				candidate = ("S")
-			case mz.endPoint == point{x, y}:
-				candidate = ("E")
-			}
-			line += candidate
-		}
-		fmt.Println(line)
-	}
-}
+// --------------------  DEBUGGING
+
+// // ToString is for dedugging
+// func (mv moveVectorLoaded) ToString() string {
+// 	return fmt.Sprintf("vect: %d, %d (%d, %d)",
+// 		mv.point.x, mv.point.y, mv.direction.x, mv.direction.y)
+// }
+
+// // ToString is for dedugging
+// func (mv moveVector) ToString() string {
+// 	return fmt.Sprintf("vect: %d, %d (%d, %d)",
+// 		mv.point.x, mv.point.y, mv.direction.x, mv.direction.y)
+// }
+
+// // Dump is for debugging
+// func (mz *Maze) Dump() {
+// 	maxLen := len(mz.allowed)
+// 	for y := range maxLen {
+// 		line := ""
+// 		for x := range maxLen {
+// 			candidate := "#"
+// 			if mz.allowed[y][x] {
+// 				candidate = "."
+// 			}
+// 			switch {
+// 			case mz.startPoint == point{x, y}:
+// 				candidate = ("S")
+// 			case mz.endPoint == point{x, y}:
+// 				candidate = ("E")
+// 			}
+// 			line += candidate
+// 		}
+// 		fmt.Println(line)
+// 	}
+// }
+
+// // DumpPath is for debugging
+// func (mz *Maze) DumpPath(history []moveVector) {
+// 	maxLen := len(mz.allowed)
+// 	for y := range maxLen {
+// 		line := ""
+// 		for x := range maxLen {
+// 			candidate := "#"
+// 			if mz.allowed[y][x] {
+// 				candidate = "."
+// 			}
+// 			for _, vect := range history {
+// 				if y == vect.point.y && x == vect.point.x {
+// 					switch {
+// 					case vect.direction == direction{1, 0}:
+// 						candidate = ">"
+// 					case vect.direction == direction{-1, 0}:
+// 						candidate = "<"
+// 					case vect.direction == direction{0, 1}:
+// 						candidate = "v"
+// 					case vect.direction == direction{0, -1}:
+// 						candidate = "^"
+// 					}
+// 				}
+// 			}
+// 			line += candidate
+// 		}
+// 		fmt.Println(line)
+// 	}
+// }

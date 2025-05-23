@@ -6,7 +6,8 @@ import (
 )
 
 // ChallengeOne is part one of today's challenge
-func ChallengeOne(data []string) int {
+func ChallengeOne(data []string) maze.Result {
 	mz := maze.New(data)
+
 	return mz.Solve()
 }
