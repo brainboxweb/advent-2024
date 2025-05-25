@@ -11,7 +11,7 @@ const (
 	turnCost = 1000
 )
 
-// New return a new warehouse
+// New returns a new Maze
 func New(data []string) *Maze {
 	moveCost := make(map[moveVector]int)
 	mz := &Maze{moveVectorCost: moveCost}

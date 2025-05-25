@@ -7,7 +7,7 @@ import (
 	"github.com/brainboxweb/advent-2024/stack"
 )
 
-// New return a new warehouse
+// New returns a new warehouse
 func New(mapDetails [][]string) *Warehouse {
 	w := &Warehouse{}
 	w.populateAllowed(len(mapDetails))
