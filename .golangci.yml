@@ -199,6 +199,8 @@ linters:
           arguments: [10]
         - name: function-length
           exclude: ["TEST"]
+        - name:  line-length-limit
+          exclude: ["TEST"]
 
 
     cyclop:
