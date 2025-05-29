@@ -51,8 +51,13 @@ func TestNew(t *testing.T) {
 	for _, tt := range tests {
 		t.Run("test", func(t *testing.T) {
 			comp := computer.New(tt.length)
-			comp.AddCorrupted(tt.data, tt.corruptLimit)
-			result := comp.Walk()
+			for i, item := range tt.data {
+				if i > tt.corruptLimit-1 {
+					break
+				}
+				comp.AddCorruptedByte(item)
+			}
+			_, result := comp.Walk()
 			assert.Equal(t, tt.expected, result)
 		})
 	}
