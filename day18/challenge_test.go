@@ -10,7 +10,7 @@ import (
 
 const testDataFile = "../testdata/"
 
-func TestChallenge(t *testing.T) {
+func TestChallengeOne(t *testing.T) {
 	tests := []struct {
 		dataFile     string
 		length       int
@@ -34,6 +34,32 @@ func TestChallenge(t *testing.T) {
 		t.Run(tt.dataFile, func(t *testing.T) {
 			data := helpers.GetDataString(testDataFile + tt.dataFile)
 			result := day18.ChallengeOne(data, tt.length, tt.corruptLimit)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestChallengeTwo(t *testing.T) {
+	tests := []struct {
+		dataFile string
+		length   int
+		expected string
+	}{
+		{
+			"day18_test.txt",
+			7,
+			"6,1",
+		},
+		{
+			"day18.txt",
+			71,
+			"28,26",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.dataFile, func(t *testing.T) {
+			data := helpers.GetDataString(testDataFile + tt.dataFile)
+			result := day18.ChallengeTwo(data, tt.length)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
