@@ -16,13 +16,10 @@ func New(mapDetails [][]string) *Warehouse {
 		for x, val := range line {
 			switch val {
 			case "@":
-				fmt.Println("robot!")
 				w.robotLocn = point{x, y}
 			case "O":
-				fmt.Println("box!")
 				w.boxes[makeIndex(x, y)] = point{x, y}
 			case "#":
-				fmt.Println("wall!")
 				w.allowed[y][x] = false // or remove?
 			}
 		}
@@ -33,8 +30,8 @@ func New(mapDetails [][]string) *Warehouse {
 // Warehouse represents the warehouse
 type Warehouse struct {
 	allowed   [][]bool
-	robotLocn point            // just one.
-	boxes     map[string]point // many // Is this a bit silly???
+	robotLocn point            // just one
+	boxes     map[string]point // many
 }
 
 // Move makes a move in the specified direction
@@ -51,8 +48,6 @@ func (w *Warehouse) Move(move string) {
 		dirn = direction{0, +1}
 	}
 	w.makeMove(dirn)
-
-	w.Dump() // For debug
 }
 
 // GPS returns the GPS representation of the warehouse
@@ -145,24 +140,24 @@ func (w *Warehouse) populateAllowed(limit int) {
 	w.allowed = sliceOfSlices
 }
 
-// Dump is for debugging
-func (w *Warehouse) Dump() {
-	maxLen := len(w.allowed)
-	for y := range maxLen {
-		line := ""
-		for x := range maxLen {
-			candidate := "#"
-			if w.allowed[y][x] {
-				candidate = "."
-			}
-			switch {
-			case w.robotLocn == point{x, y}:
-				candidate = ("@")
-			case w.boxes[makeIndex(x, y)] == point{x, y}:
-				candidate = ("O")
-			}
-			line += candidate
-		}
-		fmt.Println(line)
-	}
-}
+// // Dump is for debugging
+// func (w *Warehouse) Dump() {
+// 	maxLen := len(w.allowed)
+// 	for y := range maxLen {
+// 		line := ""
+// 		for x := range maxLen {
+// 			candidate := "#"
+// 			if w.allowed[y][x] {
+// 				candidate = "."
+// 			}
+// 			switch {
+// 			case w.robotLocn == point{x, y}:
+// 				candidate = ("@")
+// 			case w.boxes[makeIndex(x, y)] == point{x, y}:
+// 				candidate = ("O")
+// 			}
+// 			line += candidate
+// 		}
+// 		fmt.Println(line)
+// 	}
+// }
