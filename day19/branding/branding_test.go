@@ -8,7 +8,6 @@ import (
 )
 
 func TestIsPossible(t *testing.T) {
-	towels := branding.NewTowels([]string{"r", "wr", "b", "g", "bwu", "rb", "gb", "br"})
 	tests := []struct {
 		pattern  string
 		expected bool
@@ -48,6 +47,7 @@ func TestIsPossible(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run("test", func(t *testing.T) {
+			towels := branding.NewTowels([]string{"r", "wr", "b", "g", "bwu", "rb", "gb", "br"})
 			result := towels.IsPossible(tt.pattern)
 			assert.Equal(t, tt.expected, result)
 		})
