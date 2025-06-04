@@ -32,3 +32,26 @@ func TestChallengeOne(t *testing.T) {
 		})
 	}
 }
+
+func TestChallengeTwo(t *testing.T) {
+	tests := []struct {
+		dataFile string
+		expected int
+	}{
+		{
+			"day19_test.txt",
+			16,
+		},
+		{
+			"day19.txt",
+			639963796864990,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.dataFile, func(t *testing.T) {
+			data := helpers.GetDataString(testDataFile + tt.dataFile)
+			result := day19.ChallengeTwo(data)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
