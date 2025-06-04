@@ -13,9 +13,21 @@ func ChallengeOne(data []string) int {
 	counter := 0
 	tt := branding.NewTowels(result.towels)
 	for _, patt := range result.patterns {
-		if tt.IsPossible(patt) {
+		if tt.CanObtain(patt) > 0 {
 			counter++
 		}
+	}
+	return counter
+}
+
+// ChallengeTwo is part one of today's challenge
+func ChallengeTwo(data []string) int {
+	result := parse(data)
+
+	counter := 0
+	tt := branding.NewTowels(result.towels)
+	for _, patt := range result.patterns {
+		counter += tt.CanObtain(patt)
 	}
 	return counter
 }
